@@ -1,38 +1,46 @@
 /* -------------------  MOBILE  --------------------- */
 
 body {
-  display: flex;
-  flex-direction: column;
-  font-family: Arial;
-  min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial;
+    min-height: 100vh;
 }
 
 header {
-  /* header styles */
+    /* header styles */
+}
+
+section {
+    display: none;
+}
+
+section.active {
+    display: block;
 }
 
 main {
-  flex: 1;
-  padding: 20px;
+    flex: 1;
+    padding: 20px;
 }
 
 footer {
-  /* footer styles */
+    /* footer styles */
 }
 
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
-  /* use mobile */
+    /* use mobile */
 }
 
 /* -------------------  DESKTOP  -------------------- */
 
 @media (min-width: 1224px) {
-  /* use mobile */
+    /* use mobile */
 }
 
 /* -------------------  LARGE SCREENS  -------------- */
 
 @media (min-width: 1824px) {
-  /* use mobile */
+    /* use mobile */
 }
