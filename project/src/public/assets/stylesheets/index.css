@@ -15,6 +15,14 @@ section {
     display: none;
 }
 
+.slideshow__photo {
+    display: none;
+}
+
+.slideshow__photo.active {
+    display: block;
+}
+
 section.active {
     display: block;
 }

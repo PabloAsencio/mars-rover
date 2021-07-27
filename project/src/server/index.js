@@ -35,7 +35,7 @@ const makePhotoObject = (photo) => {
     };
 };
 
-const getLastThreePictures = async (rover, max_sol) => {
+const getLastNPictures = async (rover, max_sol, n) => {
     const result = [];
     try {
         const response = await fetch(
@@ -43,24 +43,26 @@ const getLastThreePictures = async (rover, max_sol) => {
         );
         const responseJSON = await response.json();
         const latestPhotos = responseJSON.latest_photos.map(makePhotoObject);
-        const missingPhotos =
-            3 -
-            result.push(...latestPhotos.filter((current, index) => index < 3));
-        if (missingPhotos > 0) {
+        let missingPhotos =
+            n -
+            result.push(...latestPhotos.filter((current, index) => index < n));
+        let sol = max_sol - 1;
+        while (missingPhotos > 0) {
             const secondResponse = await fetch(
                 `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}/photos?sol=${
-                    max_sol - 1
+                    sol
                 }&api_key=${process.env.API_KEY}`
             );
             const secondResponseJSON = await secondResponse.json();
             const additionalPhotos = secondResponseJSON.photos.map(
                 makePhotoObject
             );
-            result.push(
-                additionalPhotos.filter(
+            missingPhotos = n - result.push(
+                ...additionalPhotos.filter(
                     (current, index) => index < missingPhotos
                 )
             );
+            sol--;
         }
     } catch (error) {
         console.log(error);
@@ -84,7 +86,7 @@ app.get('/manifests/:roverName', async (req, res) => {
                     max_date,
                     max_sol,
                 } = roverInfo.photo_manifest;
-                const photos = await getLastThreePictures(name, max_sol);
+                const photos = await getLastNPictures(name, max_sol, 5);
                 return {
                     name,
                     launch_date,
