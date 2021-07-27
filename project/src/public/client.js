@@ -149,12 +149,18 @@ const App = (state) => {
     let rovers = state.get('rovers');
 
     return `
-        <header></header>
+        <header>
+            <h1>Mars Rovers</h1>
+        </header>
         <main>
             ${rovers.map(createRoverButton).join('\n')}
             ${rovers.map(createRoverSection).join('\n')}
         </main>
-        <footer></footer>
+        <footer>
+            <h2>Mars Rovers</h2>
+            <p><small>Powered by <a href="https://api.nasa.gov/"></a>NASA APIs.</small></p>
+            <p><small>&copy; Pablo Asencio Sánchez, 2021</small></p>
+        </footer>
     `;
 };
 
