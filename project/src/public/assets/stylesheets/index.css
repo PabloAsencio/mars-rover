@@ -3,28 +3,143 @@
 body {
     display: flex;
     flex-direction: column;
-    font-family: Arial;
+    font-family: 'Monserrat', sans-serif;
     min-height: 100vh;
 }
 
+h1,
+h2,
+button,
+.loadingMessage,
+.errorMessage {
+    font-family: 'Audiowide', cursive;
+}
+
+.loadingMessage,
+.errorMessage {
+    padding: 1rem;
+}
+
 header {
-    /* header styles */
+    color: #ff351f;
+    padding: 1rem 2.25rem 0.5rem 2.25rem;
+}
+
+.button-area {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr;
+}
+
+button {
+    background-color: white;
+    color: #0b3d91;
+    padding: 0.75rem 0.25rem;
+    border: solid 1px #0b3d91;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #0b3d91;
+    color: white;
+    cursor: auto;
 }
 
 section {
     display: none;
+    border: solid 1px hsl(218, 86%, 31%);
+    padding-bottom: 0;
+    min-height: 430px;
+}
+
+section h2 {
+    color: #0b3d91;
+    padding: 1rem 1rem 0 1rem;
+}
+
+.slideshow__info {
+    padding: 1rem;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+.slideshow__label {
+    font-weight: 600;
+}
+
+.slideshow__date {
+    position: absolute;
+    right: 1rem;
+    text-transform: capitalize;
+}
+
+.slideshow__number {
+    font-size: 0.9rem;
+}
+
+.slideshow__caption {
+    font-size: 0.9rem;
+    display: flex;
+    flex-flow: column;
+}
+
+.slideshow {
+    display: flex;
+}
+
+figcaption {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    padding-top: 0.5rem;
 }
 
 .slideshow__photo {
     display: none;
+    background-color: black;
+    color: white;
+    width: 100%;
+    height: 100%;
+    min-height: 270px;
 }
 
 .slideshow__photo.active {
     display: block;
+    position: relative;
+}
+
+figure > img {
+    object-fit: cover;
+    object-position: center;
+    width: 250px;
+    height: 250px;
+}
+
+.image--small {
+    object-fit: scale-down;
+}
+
+.slideshow__arrow {
+    position: absolute;
+    top: 33%;
+    color: white;
+    font-weight: bold;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.slideshow__arrow--previous {
+    left: 1rem;
+}
+
+.slideshow__arrow--next {
+    right: 1rem;
 }
 
 section.active {
-    display: block;
+    display: flex;
+    flex-flow: column nowrap;
 }
 
 main {
@@ -33,7 +148,21 @@ main {
 }
 
 footer {
-    /* footer styles */
+    background-color: black;
+    color: white;
+    padding: 2.25rem;
+}
+
+footer h2 {
+    padding: 0 0 0.5rem 0;
+}
+
+footer a {
+    color: inherit;
+}
+
+footer a:hover {
+    color: #ff351f;
 }
 
 /* -------------------  TABLET  --------------------- */

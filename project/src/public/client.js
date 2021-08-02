@@ -28,10 +28,18 @@ const formatDate = (stringDate) => {
     });
 };
 
+const createAltText = (photo) => {
+    return `${photo.rover} Rover, ${formatDate(photo.earth_date)}, ${
+        photo.camera
+    }`;
+};
+
 const createCaption = (photo) => {
-    return `${photo.rover} &mdash; ${photo.camera} &mdash; ${formatDate(
+    return `<span class="slideshow__caption--name">${
+        photo.rover
+    } Rover,</span> <span class="slideshow__caption--date">${formatDate(
         photo.earth_date
-    )}`;
+    )},</span> <span class="slideshow__caption--camera">${photo.camera}</span>`;
 };
 
 const getNewIndex = (computedIndex, maxIndex) => {
@@ -47,21 +55,32 @@ const showSlide = (rover, index) => {
         .classList.add('active');
 };
 
+const checkImageSize = (src) => {
+    const img = document.querySelector(`[src="${src}"]`);
+    if (img.naturalWidth < 100) {
+        img.classList.add('image--small');
+    }
+};
+
 const createSlideshowItem = (photo, index, array) => {
     return `
         <div class="slideshow__photo${
             index == 0 ? ' active' : ''
         }" data-rover="${photo.rover}" data-index="${index}">
             <figure>
-                <img src="${photo.img_src}" alt="${createCaption(photo)}">
-                <figcaption>${index + 1} / ${
+                <img src="${photo.img_src}" onLoad="checkImageSize('${
+        photo.img_src
+    }')" alt="${createAltText(photo)}">
+                <figcaption><span class="slideshow__number">(${index + 1} / ${
         array.length
-    } &ndash; ${createCaption(photo)}</figcaption>
+    })</span> <span class="slideshow__caption">${createCaption(
+        photo
+    )}</span></figcaption>
             </figure>
-            <a class="slideshow__arrow--previous" onClick="showSlide('${
+            <a class="slideshow__arrow slideshow__arrow--previous" onClick="showSlide('${
                 photo.rover
             }', ${getNewIndex(index - 1, array.length)})">&#10094;</a>
-            <a class="slideshow__arrow--next" onClick="showSlide('${
+            <a class="slideshow__arrow slideshow__arrow--next" onClick="showSlide('${
                 photo.rover
             }', ${getNewIndex(index + 1, array.length)})">&#10095;</a>
         </div>
@@ -78,18 +97,28 @@ const createSlideshow = (rover) => {
 
 const createRoverCard = (rover) => {
     return `
-    <p>Launch date: ${rover.get('launch_date')}</p>
-    <p>Landing date: ${rover.get('landing_date')}</p>
-    <p>Most recent active date: ${rover.get('max_date')}</p>
-    <p>Status: ${rover.get('status')}</p>
+    <div class="slideshow__info">
+        <p><span class="slideshow__label">Launch date:</span> <span class="slideshow__date">${formatDate(
+            rover.get('launch_date')
+        )}</span></p>
+        <p><span class="slideshow__label">Landing date:</span> <span class="slideshow__date">${formatDate(
+            rover.get('landing_date')
+        )}</span></p>
+        <p><span class="slideshow__label">Most recent activity:</span> <span class="slideshow__date">${formatDate(
+            rover.get('max_date')
+        )}</span></p>
+        <p><span class="slideshow__label">Status:</span> <span class="slideshow__date">${rover.get(
+            'status'
+        )}</span></p>
+    </div>
     ${createSlideshow(rover)}`;
 };
 
 const createRoverSectionContent = (rover) => {
     if (!rover.get('error') && !rover.get('photos')) {
-        return `<p>Loading data...</p>`;
+        return `<p class="loadingMessage">Loading data...</p>`;
     } else if (rover.get('error')) {
-        return `<p>${rover.get('error')}</p>`;
+        return `<p class="errorMessage">${rover.get('error')}</p>`;
     } else {
         return createRoverCard(rover);
     }
@@ -99,12 +128,10 @@ const createRoverSection = (rover) => {
     return `<section ${
         store.get('active') === rover.get('name') ? 'class="active"' : ''
     }>
-        <h3>${rover.get('name')}</h3>
+        <h2>${rover.get('name')}</h2>
         ${createRoverSectionContent(rover)}
     </section>`;
 };
-
-const fetchPhotos = (rover) => {};
 
 const showRover = (rover) => {
     const newState = Immutable.Map({ active: rover });
@@ -114,24 +141,22 @@ const showRover = (rover) => {
             .then((response) => response.json())
             .then((roverData) => {
                 updateStore(
-                    newState.set(
-                        'rovers',
-                        rovers.set(rover, Immutable.Map(roverData))
-                    )
+                    Immutable.Map({
+                        rovers: rovers.set(rover, Immutable.Map(roverData)),
+                    })
                 );
             })
             .catch((error) => {
                 updateStore(
-                    newState.set(
-                        'rovers',
-                        rovers.set(
+                    Immutable.Map({
+                        rovers: rovers.set(
                             rover,
                             Immutable.Map({
                                 name: rover,
                                 error: 'Something went wrong. Try again later.',
                             })
-                        )
-                    )
+                        ),
+                    })
                 );
             });
     }
@@ -139,9 +164,9 @@ const showRover = (rover) => {
 };
 
 const createRoverButton = (rover) => {
-    return `<button onClick="showRover('${rover.get('name')}')">${rover.get(
-        'name'
-    )}</button>`;
+    return `<button onClick="showRover('${rover.get('name')}')" ${
+        store.get('active') == rover.get('name') ? 'disabled' : ''
+    }>${rover.get('name')}</button>`;
 };
 
 // create content
@@ -153,12 +178,13 @@ const App = (state) => {
             <h1>Mars Rovers</h1>
         </header>
         <main>
-            ${rovers.map(createRoverButton).join('\n')}
+            <div class="button-area">${rovers.map(createRoverButton).join('\n')}
+            </div>
             ${rovers.map(createRoverSection).join('\n')}
         </main>
         <footer>
             <h2>Mars Rovers</h2>
-            <p><small>Powered by <a href="https://api.nasa.gov/"></a>NASA APIs.</small></p>
+            <p><small>Powered by <a href="https://api.nasa.gov/">NASA APIs.</a></small></p>
             <p><small>&copy; Pablo Asencio Sánchez, 2021</small></p>
         </footer>
     `;
