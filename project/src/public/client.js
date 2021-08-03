@@ -97,28 +97,34 @@ const createSlideshow = (rover) => {
 
 const createRoverCard = (rover) => {
     return `
-    <div class="slideshow__info">
-        <p><span class="slideshow__label">Launch date:</span> <span class="slideshow__date">${formatDate(
-            rover.get('launch_date')
-        )}</span></p>
-        <p><span class="slideshow__label">Landing date:</span> <span class="slideshow__date">${formatDate(
-            rover.get('landing_date')
-        )}</span></p>
-        <p><span class="slideshow__label">Most recent activity:</span> <span class="slideshow__date">${formatDate(
-            rover.get('max_date')
-        )}</span></p>
-        <p><span class="slideshow__label">Status:</span> <span class="slideshow__date">${rover.get(
-            'status'
-        )}</span></p>
+    <div class="rover">
+        <h2 class="rover__title">${rover.get('name')}</h2>
+        <div class="rover__info">
+            <p><span class="rover__label">Launch date:</span> <span class="rover__date">${formatDate(
+                rover.get('launch_date')
+            )}</span></p>
+            <p><span class="rover__label">Landing date:</span> <span class="rover__date">${formatDate(
+                rover.get('landing_date')
+            )}</span></p>
+            <p><span class="rover__label">Most recent activity:</span> <span class="rover__date">${formatDate(
+                rover.get('max_date')
+            )}</span></p>
+            <p><span class="rover__label">Status:</span> <span class="rover__date">${rover.get(
+                'status'
+            )}</span></p>
+        </div>
     </div>
     ${createSlideshow(rover)}`;
 };
 
 const createRoverSectionContent = (rover) => {
     if (!rover.get('error') && !rover.get('photos')) {
-        return `<p class="loadingMessage">Loading data...</p>`;
+        return `
+        <h2 class="rover__title">${rover.get('name')}</h2>
+        <p class="loadingMessage">Loading data...</p>`;
     } else if (rover.get('error')) {
-        return `<p class="errorMessage">${rover.get('error')}</p>`;
+        return `<h2 class="rover__title">${rover.get('name')}</h2>
+                <p class="errorMessage">${rover.get('error')}</p>`;
     } else {
         return createRoverCard(rover);
     }
@@ -128,7 +134,6 @@ const createRoverSection = (rover) => {
     return `<section ${
         store.get('active') === rover.get('name') ? 'class="active"' : ''
     }>
-        <h2>${rover.get('name')}</h2>
         ${createRoverSectionContent(rover)}
     </section>`;
 };
@@ -183,9 +188,11 @@ const App = (state) => {
             ${rovers.map(createRoverSection).join('\n')}
         </main>
         <footer>
-            <h2>Mars Rovers</h2>
-            <p><small>Powered by <a href="https://api.nasa.gov/">NASA APIs.</a></small></p>
-            <p><small>&copy; Pablo Asencio Sánchez, 2021</small></p>
+            <div class="footer__content">
+                <h2>Mars Rovers</h2>
+                <p><small>Powered by <a href="https://api.nasa.gov/">NASA APIs.</a></small></p>
+                <p><small>&copy; Pablo Asencio Sánchez, 2021</small></p>
+            </div>
         </footer>
     `;
 };

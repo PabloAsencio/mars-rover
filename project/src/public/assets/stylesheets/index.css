@@ -3,6 +3,7 @@
 body {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     font-family: 'Monserrat', sans-serif;
     min-height: 100vh;
 }
@@ -13,6 +14,10 @@ button,
 .loadingMessage,
 .errorMessage {
     font-family: 'Audiowide', cursive;
+}
+
+h1 {
+    font-size: 2rem;
 }
 
 .loadingMessage,
@@ -49,7 +54,7 @@ button:disabled {
 
 section {
     display: none;
-    border: solid 1px hsl(218, 86%, 31%);
+    border: solid 1px #0b3d91;
     padding-bottom: 0;
     min-height: 430px;
 }
@@ -59,17 +64,17 @@ section h2 {
     padding: 1rem 1rem 0 1rem;
 }
 
-.slideshow__info {
+.rover__info {
     padding: 1rem;
     font-size: 0.9rem;
     position: relative;
 }
 
-.slideshow__label {
+.rover__label {
     font-weight: 600;
 }
 
-.slideshow__date {
+.rover__date {
     position: absolute;
     right: 1rem;
     text-transform: capitalize;
@@ -105,7 +110,8 @@ figcaption {
 }
 
 .slideshow__photo.active {
-    display: block;
+    display: flex;
+    justify-content: center;
     position: relative;
 }
 
@@ -167,17 +173,104 @@ footer a:hover {
 
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
-    /* use mobile */
+    h1 {
+        font-size: 3rem;
+    }
+
+    .button-area {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .rover {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .rover {
+        max-width: 75%;
+    }
+
+    .rover__title {
+        font-size: 1.6rem;
+    }
+
+    .rover__info > p {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+    }
+
+    .rover__label {
+        display: inline-block;
+    }
+
+    .rover__date {
+        position: static;
+        display: inline-block;
+        margin-left: 2rem;
+    }
+
+    figure > img {
+        width: 500px;
+        height: 500px;
+    }
+
+    figcaption {
+        grid-template-columns: 1fr 5fr;
+    }
+
+    .slideshow__info {
+        max-width: 45ch;
+    }
 }
 
 /* -------------------  DESKTOP  -------------------- */
 
 @media (min-width: 1224px) {
-    /* use mobile */
+    main,
+    header,
+    .footer__content {
+        max-width: 75%;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 3.5rem;
+    }
+
+    .button-area {
+        max-width: 75%;
+    }
+
+    .rover__title {
+        font-size: 2rem;
+    }
+
+    .slideshow__photo {
+        padding-top: 1.5rem;
+    }
+
+    .footer__content {
+        padding-left: 2rem;
+    }
+
+    figure > img {
+        width: 650px;
+    }
 }
 
 /* -------------------  LARGE SCREENS  -------------- */
 
 @media (min-width: 1824px) {
-    /* use mobile */
+    main,
+    header,
+    .footer__content {
+        max-width: 65%;
+        margin: 0 auto;
+    }
+
+    figure > img {
+        width: 750px;
+        height: 550px;
+    }
 }
